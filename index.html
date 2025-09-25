@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>নগদ ও বিকাশ পেমেন্ট গেটওয়ে</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+body {
+    background: linear-gradient(135deg,#1a2a6c 0%,#2b5876 100%);
+    color:#333;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:10px;
+    overflow-y:auto;
+}
+.container {
+    background:white;
+    border-radius:15px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.3);
+    width:100%;
+    max-width:650px;
+    overflow:hidden;
+    margin-bottom:20px;
+    animation: containerSlideIn 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+.header {
+    background:linear-gradient(135deg,#2b5876 0%,#4e4376 100%);
+    color:white;
+    padding:20px;
+    text-align:center;
+    position:relative;
+}
+.logo-container {
+    display:flex; 
+    justify-content:center; 
+    align-items:center; 
+    flex-wrap:wrap; 
+    margin-bottom:15px;
+    animation: logoPulse 2s infinite ease-in-out;
+}
+.logo {
+    width:60px; 
+    height:60px; 
+    background:white; 
+    border-radius:50%; 
+    display:flex; 
+    align-items:center; 
+    justify-content:center; 
+    margin-right:10px; 
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    animation: logoRotate 10s infinite linear;
+}
+.logo img {
+    width:50px; 
+    height:50px; 
+    border-radius:50%; 
+    object-fit:cover;
+    animation: logoScale 5s infinite alternate;
+}
+.logo-text {
+    font-size:22px; 
+    font-weight:700; 
+    letter-spacing:1px; 
+    margin-top:5px;
+    animation: textGlow 3s infinite alternate;
+}
+.header h1 {
+    font-size:20px; 
+    margin-bottom:5px; 
+    font-weight:600;
+    animation: fadeIn 1s ease-out 0.3s forwards;
+    opacity: 0;
+}
+.header p {
+    opacity:0.9; 
+    font-size:14px;
+    animation: fadeIn 1s ease-out 0.5s forwards;
+    opacity: 0;
+}
+.payment-methods {
+    display:flex;
+    justify-content:flex-start;
+    gap:15px;
+    overflow-x:auto;
+    padding-bottom:5px;
+    animation: fadeIn 1s ease-out 0.7s forwards;
+    opacity: 0;
+}
+.method {
+    min-width:80px; 
+    height:80px; 
+    border-radius:15px; 
+    display:flex; 
+    flex-direction:column; 
+    align-items:center; 
+    justify-content:center; 
+    font-size:13px; 
+    font-weight:600; 
+    color:white; 
+    box-shadow:0 8px 20px rgba(0,0,0,0.15); 
+    transition:all 0.3s ease; 
+    cursor:pointer; 
+    flex-shrink:0;
+    position: relative;
+    overflow: hidden;
+}
+.method::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(to bottom right, rgba(255,255,255,0.2), rgba(255,255,255,0));
+    transform: rotate(45deg);
+    transition: all 0.5s ease;
+    opacity: 0;
+}
+.method:hover::before {
+    opacity: 1;
+    animation: shineEffect 1.5s forwards;
+}
+.method:hover {
+    transform:translateY(-5px) scale(1.05); 
+    box-shadow:0 12px 25px rgba(0,0,0,0.2);
+}
+.method i {
+    font-size:28px; 
+    margin-bottom:5px;
+    transition: transform 0.3s ease;
+}
+.method:hover i {
+    transform: scale(1.2);
+}
+.nagad {
+    background:linear-gradient(135deg,#E6126B 0%,#FF2B90 100%);
+}
+.bkash {
+    background:linear-gradient(135deg,#E2136E 0%,#FF2B92 100%);
+}
+.form-container {
+    padding:20px;
+    animation: formSlideIn 0.8s ease-out 0.4s forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+.instructions {
+    background:#f8f9fa; 
+    padding:15px; 
+    border-radius:12px; 
+    margin-bottom:20px; 
+    border-left:5px solid #4e4376; 
+    font-size:14px;
+    animation: instructionFade 0.6s ease-out;
+}
+.instructions h3 {
+    margin-bottom:10px; 
+    color:#2b5876; 
+    display:flex; 
+    align-items:center; 
+    gap:10px; 
+    font-size:16px;
+}
+.instructions ol {
+    padding-left:18px;
+}
+.instructions li {
+    margin-bottom:8px; 
+    line-height:1.5;
+    animation: listItemSlide 0.5s ease-out forwards;
+    opacity: 0;
+    transform: translateX(-10px);
+}
+.instructions li:nth-child(1) { animation-delay: 0.1s; }
+.instructions li:nth-child(2) { animation-delay: 0.2s; }
+.instructions li:nth-child(3) { animation-delay: 0.3s; }
+.instructions li:nth-child(4) { animation-delay: 0.4s; }
+.instructions li:nth-child(5) { animation-delay: 0.5s; }
+.copy-number {
+    display:flex; 
+    align-items:center; 
+    background:#e9ecef; 
+    padding:10px 12px; 
+    border-radius:8px; 
+    margin:8px 0;
+    animation: copyPulse 3s infinite ease-in-out;
+}
+.copy-number span {
+    flex:1; 
+    font-weight:600; 
+    letter-spacing:1px;
+}
+.copy-btn {
+    background:#2b5876; 
+    color:white; 
+    border:none; 
+    padding:6px 12px; 
+    border-radius:6px; 
+    cursor:pointer; 
+    font-size:12px; 
+    display:flex; 
+    align-items:center; 
+    gap:5px; 
+    transition:all 0.3s;
+}
+.copy-btn:hover {
+    background:#4e4376;
+    transform: scale(1.05);
+}
+.form-group {
+    margin-bottom:15px;
+    animation: formGroupSlide 0.5s ease-out forwards;
+    opacity: 0;
+    transform: translateY(10px);
+}
+.form-group:nth-child(1) { animation-delay: 0.6s; }
+.form-group:nth-child(2) { animation-delay: 0.7s; }
+.form-group:nth-child(3) { animation-delay: 0.8s; }
+.form-group:nth-child(4) { animation-delay: 0.9s; }
+.form-group:nth-child(5) { animation-delay: 1.0s; }
+label {
+    display:block; 
+    margin-bottom:5px; 
+    font-weight:600; 
+    color:#444; 
+    font-size:14px;
+}
+input {
+    width:100%; 
+    padding:12px; 
+    border:2px solid #e9ecef; 
+    border-radius:10px; 
+    font-size:14px; 
+    transition:all 0.3s;
+}
+input:focus {
+    outline:none; 
+    border-color:#2b5876; 
+    box-shadow:0 0 0 3px rgba(43,88,118,0.2);
+    transform: scale(1.02);
+}
+button.submit-btn {
+    width:100%; 
+    padding:15px; 
+    background:linear-gradient(135deg,#2b5876 0%,#4e4376 100%); 
+    color:white; 
+    border:none; 
+    border-radius:10px; 
+    font-size:16px; 
+    font-weight:600; 
+    cursor:pointer; 
+    transition:all 0.3s; 
+    box-shadow:0 5px 15px rgba(43,88,118,0.3); 
+    display:flex; 
+    justify-content:center; 
+    align-items:center; 
+    gap:10px;
+    position: relative;
+    overflow: hidden;
+}
+button.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: all 0.6s ease;
+}
+button.submit-btn:hover::before {
+    left: 100%;
+}
+button.submit-btn:hover {
+    transform:translateY(-3px) scale(1.02); 
+    box-shadow:0 8px 20px rgba(43,88,118,0.4);
+}
+.notification {
+    margin-top:20px; 
+    padding:15px; 
+    border-radius:10px; 
+    background:#f8f9fa; 
+    border-left:5px solid #28a745; 
+    display:none; 
+    animation:notificationSlide 0.5s ease;
+}
+.notification-content {
+    display:flex; 
+    align-items:center; 
+    gap:15px;
+}
+.notification i {
+    font-size:24px; 
+    color:#28a745;
+    animation: iconBounce 1s infinite alternate;
+}
+.footer {
+    text-align:center; 
+    padding:15px; 
+    color:#6c757d; 
+    font-size:13px; 
+    border-top:1px solid #e9ecef; 
+    margin-top:15px;
+    animation: fadeIn 1s ease-out 1.2s forwards;
+    opacity: 0;
+}
+
+/* Animation Keyframes */
+@keyframes containerSlideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes logoPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+@keyframes logoRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes logoScale {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+
+@keyframes textGlow {
+    0% { text-shadow: 0 0 5px rgba(255,255,255,0.3); }
+    100% { text-shadow: 0 0 15px rgba(255,255,255,0.7); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes shineEffect {
+    0% { transform: rotate(45deg) translateX(-100%); }
+    100% { transform: rotate(45deg) translateX(100%); }
+}
+
+@keyframes formSlideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes instructionFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes listItemSlide {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes copyPulse {
+    0% { box-shadow: 0 0 0 rgba(43, 88, 118, 0.2); }
+    50% { box-shadow: 0 0 10px rgba(43, 88, 118, 0.4); }
+    100% { box-shadow: 0 0 0 rgba(43, 88, 118, 0.2); }
+}
+
+@keyframes formGroupSlide {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes notificationSlide {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes iconBounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-5px); }
+}
+
+/* Media Queries for Responsiveness */
+@media(max-width:600px){
+    .logo-text{font-size:18px;}
+    .header h1{font-size:18px;}
+    .header p{font-size:13px;}
+    .method{min-width:70px;height:70px;font-size:12px;}
+    .method i{font-size:24px;}
+    .form-container{padding:15px;}
+    .instructions{font-size:13px;}
+    label{font-size:13px;}
+    input{font-size:14px;}
+    button.submit-btn{font-size:15px;padding:12px;}
+    
+    /* Adjust animations for mobile */
+    .logo {
+        animation: logoPulse 2s infinite ease-in-out, logoScale 5s infinite alternate;
+    }
+    
+    .method::before {
+        animation: none; /* Disable shine effect on mobile for performance */
+    }
+    
+    .method:hover::before {
+        animation: none;
+    }
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+    <div class="logo-container">
+        <div class="logo"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgM9yk888m44RjBYaCIoWzujkZXOmG2AUivBqK_5Oeyi2G6h_SPyf5xFVgywicO1l6mpgdBZgcPdyQcEa2NBVRnfGnX0uyZJvmBrdRMdJqBm9cXb2NXbJz732AN9aZjoBzTGXG9EJo8kY3y9kgalSkA4gm8Ni0NJqhzTpWFsTqYsMd2LUkWaQymNx4XuOov/s1280/20250614_021418.png" alt="Payment Logo"></div>
+        <div class="logo-text">পেমেন্ট গেটওয়ে</div>
+    </div>
+    <h1>নগদ ও বিকাশ পেমেন্ট গেটওয়ে</h1>
+    <p>CSB সঙ্গে দ্রুত লেনদেন</p>
+    <div class="payment-methods">
+        <div class="method nagad" id="nagad-option"><i class="fas fa-money-bill-wave"></i><span>নগদ</span></div>
+        <div class="method bkash" id="bkash-option"><i class="fas fa-mobile-alt"></i><span>বিকাশ</span></div>
+    </div>
+</div>
+
+<div class="form-container">
+<div id="nagad-instructions" class="instructions">
+<h3><i class="fas fa-info-circle"></i> নগদ পেমেন্ট করার নিয়ম</h3>
+<ol>
+<li>নগদ অ্যাপ খুলুন</li>
+<li>Send Money/Send Payment এ ক্লিক করুন</li>
+<li>নিচের নম্বরে টাকা সেন্ড করুন</li>
+<div class="copy-number">
+<span id="nagad-number">01619-341837</span>
+<button class="copy-btn" onclick="copyToClipboard('nagad-number')"><i class="fas fa-copy"></i> কপি</button>
+</div>
+<li>Reference তে আপনার নাম লিখুন</li>
+<li>ফর্ম পূরণ করুন এবং সাবমিট করুন</li>
+</ol>
+</div>
+
+<div id="bkash-instructions" class="instructions" style="display:none">
+<h3><i class="fas fa-info-circle"></i> বিকাশ পেমেন্ট করার নিয়ম</h3>
+<ol>
+<li>*২৪৭# ডায়াল করুন</li>
+<li>Send Money/Send Payment এ ক্লিক করুন</li>
+<li>নিচের নম্বরে টাকা সেন্ড করুন</li>
+<div class="copy-number">
+<span id="bkash-number">01405004503</span>
+<button class="copy-btn" onclick="copyToClipboard('bkash-number')"><i class="fas fa-copy"></i> কপি</button>
+</div>
+<li>Reference তে আপনার নাম লিখুন</li>
+<li>ফর্ম পূরণ করুন এবং সাবমিট করুন</li>
+</ol>
+</div>
+
+<div class="form-group">
+<label for="amount">পরিমাণ (৳)</label>
+<input type="number" id="amount" placeholder="লেনদেনের পরিমাণ লিখুন" min="10">
+</div>
+
+<div class="form-group">
+<label for="transaction">ট্রানজেকশন আইডি (Transaction ID)</label>
+<input type="text" id="transaction" placeholder="ট্রানজেকশন আইডি লিখুন">
+</div>
+
+<div class="form-group">
+<label for="name">আপনার নাম</label>
+<input type="text" id="name" placeholder="আপনার পূর্ণ নাম লিখুন">
+</div>
+
+<div class="form-group">
+<label for="fb">ফেসবুক আইডি/নাম</label>
+<input type="text" id="fb" placeholder="আপনার ফেসবুক আইডি বা প্রোফাইল নাম">
+</div>
+
+<div class="form-group">
+<label for="paid-number">যে নাম্বারে পেমেন্ট করেছেন</label>
+<input type="tel" id="paid-number" placeholder="যে নাম্বারে টাকা পাঠানো হয়েছে" pattern="[0-9]*" inputmode="numeric">
+</div>
+
+<button class="submit-btn" id="pay-btn"><i class="fas fa-paper-plane"></i> পেমেন্ট তথ্য সাবমিট করুন</button>
+
+<div class="notification" id="notification">
+<div class="notification-content"><i class="fas fa-check-circle"></i>
+<div>
+<h3>সফলভাবে জমা হয়েছে!</h3>
+<p>আপনার পেমেন্ট তথ্য সফলভাবে জমা হয়েছে। শীঘ্রই আপনার আপনার পেমেন্ট  কনফার্ম করা হবে ।</p>
+</div></div>
+</div>
+
+<div class="footer">
+<p>© ২০২৫ পেমেন্ট গেটওয়ে। সকল মালিক Cyber Sentinel Bangladesh টিম।</p>
+</div>
+</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const nagadOption=document.getElementById('nagad-option');
+    const bkashOption=document.getElementById('bkash-option');
+    const nagadInstructions=document.getElementById('nagad-instructions');
+    const bkashInstructions=document.getElementById('bkash-instructions');
+    const payBtn=document.getElementById('pay-btn');
+    const notification=document.getElementById('notification');
+    let selectedOption='nagad';
+    
+    // Animate list items when instructions become visible
+    const animateListItems = (instructionElement) => {
+        const listItems = instructionElement.querySelectorAll('li');
+        listItems.forEach((item, index) => {
+            item.style.animation = `listItemSlide 0.5s ease-out ${index * 0.1 + 0.2}s forwards`;
+        });
+    };
+    
+    nagadOption.addEventListener('click',function(){
+        selectedOption='nagad'; 
+        nagadInstructions.style.display='block'; 
+        bkashInstructions.style.display='none';
+        nagadOption.style.opacity='1'; 
+        bkashOption.style.opacity='0.8';
+        animateListItems(nagadInstructions);
+    });
+    
+    bkashOption.addEventListener('click',function(){
+        selectedOption='bkash'; 
+        bkashInstructions.style.display='block'; 
+        nagadInstructions.style.display='none';
+        bkashOption.style.opacity='1'; 
+        nagadOption.style.opacity='0.8';
+        animateListItems(bkashInstructions);
+    });
+    
+    payBtn.addEventListener('click',function(){
+        const amount=document.getElementById('amount').value;
+        const transactionId=document.getElementById('transaction').value;
+        const name=document.getElementById('name').value;
+        const fbId=document.getElementById('fb').value;
+        const paidNumber=document.getElementById('paid-number').value;
+        
+        if(!amount||!transactionId||!name||!fbId||!paidNumber){
+            // Add shake animation to empty fields
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                if(!input.value) {
+                    input.style.animation = 'shake 0.5s';
+                    setTimeout(() => {
+                        input.style.animation = '';
+                    }, 500);
+                }
+            });
+            alert('দয়া করে সকল তথ্য প্রদান করুন'); 
+            return;
+        }
+        
+        if(amount<10){
+            document.getElementById('amount').style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                document.getElementById('amount').style.animation = '';
+            }, 500);
+            alert('পরিমাণ কমপক্ষে ১০ টাকা হতে হবে'); 
+            return;
+        }
+        
+        // Add loading animation to button
+        payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> প্রসেস হচ্ছে...';
+        payBtn.disabled = true;
+        
+        setTimeout(() => {
+            notification.style.display='block';
+            document.getElementById('amount').value=''; 
+            document.getElementById('transaction').value=''; 
+            document.getElementById('name').value=''; 
+            document.getElementById('fb').value=''; 
+            document.getElementById('paid-number').value='';
+            
+            // Reset button state
+            payBtn.innerHTML = '<i class="fas fa-paper-plane"></i> পেমেন্ট তথ্য সাবমিট করুন';
+            payBtn.disabled = false;
+            
+            setTimeout(()=>{
+                notification.style.display='none';
+            },5000);
+
+            // Telegram API call (replace YOUR_BOT_TOKEN and YOUR_CHAT_ID)
+            const telegramToken='7283963006:AAGxEJnW02mYGEIegfvEXz7yL1iPEb1D-hw';
+            const chatId='6047963934';
+            const message=`নতুন পেমেন্ট তথ্য:
+পরিমাণ: ${amount}৳
+ট্রানজেকশন আইডি: ${transactionId}
+নাম: ${name}
+ফেসবুক আইডি: ${fbId}
+পেমেন্ট নাম্বার: ${paidNumber}
+পদ্ধতি: ${selectedOption}`;
+            const url=`https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+            fetch(url).then(res=>res.json()).then(data=>console.log('Telegram:',data)).catch(err=>console.error(err));
+        }, 1500);
+    });
+    
+    nagadOption.style.opacity='1'; 
+    bkashOption.style.opacity='0.8';
+    
+    // Animate the initial instructions
+    animateListItems(nagadInstructions);
+});
+
+function copyToClipboard(id){
+    const e=document.getElementById(id);
+    navigator.clipboard.writeText(e.innerText).then(()=>{
+        const btn=e.nextElementSibling;
+        const orig=btn.innerHTML;
+        btn.innerHTML='<i class="fas fa-check"></i> কপি হয়েছে!';
+        btn.style.animation = 'copyPulse 0.5s';
+        setTimeout(()=>{
+            btn.innerHTML=orig;
+            btn.style.animation = '';
+        },2000);
+    }).catch(err=>console.error(err));
+}
+
+// Add shake animation for form validation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+`;
+document.head.appendChild(style);
+</script>
+</body>
+  </html>
